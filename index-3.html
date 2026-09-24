@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="tg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZARRIN Market🛍️</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#151922}
+header{background:#101722;color:#fff;position:sticky;top:0;z-index:20}.top{max-width:1200px;margin:auto;padding:14px 5%;display:flex;align-items:center;gap:18px}.logo{font-weight:900;font-size:25px;color:#ffd13b;white-space:nowrap}.search{flex:1}.search input{width:100%;padding:13px 18px;border:0;border-radius:25px;font-size:15px}.cart{background:#ffc928;border:0;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer}
+nav{background:#fff;border-bottom:1px solid #ddd}.nav{max-width:1200px;margin:auto;padding:10px 5%;display:flex;gap:8px;overflow:auto}.nav button{border:0;background:#fff;padding:10px 14px;border-radius:10px;white-space:nowrap;cursor:pointer}.nav button.active{background:#ffc928}
+.hero{max-width:1200px;margin:22px auto;padding:38px 6%;border-radius:22px;background:linear-gradient(120deg,#171c26,#332300);color:#fff}.hero h1{font-size:42px;margin:0 0 8px}.hero p{font-size:18px}.hero b{color:#ffd13b}.wrap{max-width:1200px;margin:auto;padding:0 5%}.section-title{display:flex;justify-content:space-between;align-items:center}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 3px 14px #0001}.pic{height:190px;background:#f0f1f3;display:flex;align-items:center;justify-content:center;font-size:76px}.info{padding:15px}.info h3{margin:0 0 5px;font-size:17px}.muted{color:#777;font-size:13px}.price{font-size:20px;font-weight:900;margin:10px 0}.old{text-decoration:line-through;color:#999;font-size:13px;margin-right:7px}.add{width:100%;padding:11px;border:0;border-radius:10px;background:#111722;color:#fff;font-weight:700;cursor:pointer}.add:hover{background:#2b3442}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:50;align-items:center;justify-content:center;padding:18px}.box{background:#fff;border-radius:20px;width:min(560px,100%);max-height:92vh;overflow:auto;padding:22px}.close{float:right;border:0;border-radius:8px;padding:7px;cursor:pointer}.item{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}.item button{border:0;background:#eee;border-radius:7px;cursor:pointer}.form input,.form textarea{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}.order{width:100%;padding:13px;border:0;border-radius:11px;background:#ffc928;font-weight:900;cursor:pointer}.empty{text-align:center;padding:25px;color:#777}
+footer{margin-top:45px;background:#101722;color:#ddd;text-align:center;padding:28px}
+@media(max-width:650px){.top{flex-wrap:wrap}.search{order:3;flex-basis:100%}.hero h1{font-size:31px}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="logo">ZARRIN Market🛍️</div><div class="search"><input id="q" placeholder="Ҷустуҷӯи маҳсулот..." oninput="render()"></div><button class="cart" onclick="openCart()">🛒 Карзина <span id="count">0</span></button><button class="cart" onclick="openAdmin()">⚙️ Admin</button></div></header>
+<nav><div class="nav" id="nav"></div></nav>
+<section class="hero"><h1>ZARRIN Market🛍️</h1><p>Ҳамаи чиз дар як ҷо — <b>сифат, нархи дастрас ва фармоиши осон.</b></p><button class="order" style="width:auto;padding:12px 20px" onclick="openCart()">🛒 Дидани карзина</button></section>
+<main class="wrap"><div class="section-title"><h2 id="title">Ҳамаи маҳсулот</h2><span class="muted" id="result"></span></div><div id="products" class="grid"></div></main>
+<footer>© 2026 ZARRIN Market🛍️ — Ҳамаи чиз дар як ҷо!</footer>
+
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeCart()">✕</button><h2>🛒 Карзинаи шумо</h2><div id="items"></div><h3 id="sum"></h3><div class="form"><input id="name" placeholder="Ном ва насаб"><input id="phone" placeholder="Рақами телефон"><textarea id="address" rows="3" placeholder="Суроға / маҳалла"></textarea><button class="order" onclick="sendOrder()">📦 Фармоиш додан</button></div><p class="muted">Фармоиш тавассути WhatsApp ба рақами ZARRIN Market🛍️ фиристода мешавад.</p></div></div>
+
+<script>
+const categories=["Ҳама","Либос","Пойафзол","Телефон ва аксессуарҳо","Косметика","Маҳсулоти хона"];
+const baseProducts=[
+{id:1,n:"Костюми варзишӣ",c:"Либос",p:280,o:350,e:"👕"},
+{id:2,n:"Пойафзоли варзишӣ",c:"Пойафзол",p:380,o:450,e:"👟"},
+{id:3,n:"Смартфон",c:"Телефон ва аксессуарҳо",p:2500,o:2800,e:"📱"},
+{id:4,n:"Гӯшмонаки Bluetooth",c:"Телефон ва аксессуарҳо",p:180,o:220,e:"🎧"},
+{id:5,n:"Маҷмӯаи косметика",c:"Косметика",p:150,o:200,e:"💄"},
+{id:6,n:"Фритери ҳавоӣ",c:"Маҳсулоти хона",p:980,o:1200,e:"🍳"},
+{id:7,n:"Ҷузвдон",c:"Либос",p:210,o:250,e:"🎒"},
+{id:8,n:"Соати электронӣ",c:"Телефон ва аксессуарҳо",p:280,o:330,e:"⌚"},
+{id:9,n:"Чароғи хона",c:"Маҳсулоти хона",p:160,o:190,e:"💡"},
+{id:10,n:"Креми рӯй",c:"Косметика",p:95,o:120,e:"🧴"}
+];
+let products=JSON.parse(localStorage.getItem("zarrinProducts")||"null")||baseProducts;
+let current="Ҳама",cart=JSON.parse(localStorage.getItem("zarrinCart")||"[]");
+function nav(){document.getElementById("nav").innerHTML=categories.map(x=>`<button class="${x===current?'active':''}" onclick="setCat('${x}')">${x}</button>`).join("")}
+function setCat(x){current=x;nav();render()}
+function render(){
+ let q=document.getElementById("q").value.trim().toLowerCase();
+ let list=products.filter(p=>(current==="Ҳама"||p.c===current)&&p.n.toLowerCase().includes(q));
+ document.getElementById("title").textContent=current==="Ҳама"?"Ҳамаи маҳсулот":current;
+ document.getElementById("result").textContent=list.length+" маҳсулот";
+ document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="pic">${p.img?`<img src="${p.img}" alt="${p.n}" style="width:100%;height:100%;object-fit:cover">`:p.e}</div><div class="info"><h3>${p.n}</h3><div class="muted">${p.c}</div><div class="price"><span class="old">${p.o} сомонӣ</span>${p.p} сомонӣ</div><button class="add" onclick="add(${p.id})">🛒 Ба карзина</button></div></article>`).join("");
+}
+function save(){localStorage.setItem("zarrinCart",JSON.stringify(cart));document.getElementById("count").textContent=cart.length}
+function add(id){cart.push(products.find(p=>p.id===id));save();openCart()}
+function openCart(){document.getElementById("modal").style.display="flex";draw()}
+function closeCart(){document.getElementById("modal").style.display="none"}
+function draw(){let total=cart.reduce((s,p)=>s+p.p,0);document.getElementById("items").innerHTML=cart.length?cart.map((p,i)=>`<div class="item"><span>${p.e} ${p.n}</span><b>${p.p} сомонӣ <button onclick="removeItem(${i})">✕</button></b></div>`).join(""):`<div class="empty">Карзина ҳоло холӣ аст.</div>`;document.getElementById("sum").textContent="Ҳамагӣ: "+total+" сомонӣ"}
+function removeItem(i){cart.splice(i,1);save();draw()}
+function sendOrder(){
+ if(!cart.length)return alert("Карзина холӣ аст.");
+ let name=document.getElementById("name").value.trim(), phone=document.getElementById("phone").value.trim(), address=document.getElementById("address").value.trim();
+ if(!name||!phone)return alert("Ном ва рақами телефонро пур кунед.");
+ let total=cart.reduce((s,p)=>s+p.p,0);
+ let lines=cart.map((p,i)=>`${i+1}. ${p.n} — ${p.p} сомонӣ`).join("\\n");
+ let message=`Салом, ZARRIN Market🛍️!\\n\\nФармоиш:\\n${lines}\\n\\nҲамагӣ: ${total} сомонӣ\\n\\nНом: ${name}\\nТелефон: ${phone}\\nСуроға: ${address||"Нишон дода нашудааст"}`;
+ let url="https://wa.me/992936881999?text="+encodeURIComponent(message);
+ window.open(url,"_blank");
+}
+
+function openAdmin(){document.getElementById("adminModal").style.display="flex";drawAdmin()}
+function closeAdmin(){document.getElementById("adminModal").style.display="none"}
+function saveProducts(){localStorage.setItem("zarrinProducts",JSON.stringify(products))}
+function addProduct(){
+ let n=document.getElementById("apName").value.trim(), p=Number(document.getElementById("apPrice").value), o=Number(document.getElementById("apOld").value)||p, c=document.getElementById("apCat").value, e=document.getElementById("apEmoji").value.trim()||"🛍️";
+ let file=document.getElementById("apImage").files[0];
+ if(!n||!p)return alert("Ном ва нархро пур кунед.");
+ const finish=(img)=>{
+   products.push({id:Date.now(),n,c,p,o,e,img:img||""});
+   try{saveProducts();render();drawAdmin();}
+   catch(err){alert("Акси интихобшуда хеле калон аст. Акси хурдтар интихоб кунед.");return;}
+   document.getElementById("apName").value="";
+   document.getElementById("apPrice").value="";
+   document.getElementById("apOld").value="";
+   document.getElementById("apEmoji").value="";
+   document.getElementById("apImage").value="";
+ };
+ if(file){
+   const reader=new FileReader();
+   reader.onload=()=>finish(reader.result);
+   reader.onerror=()=>alert("Акси маҳсулот хонда нашуд.");
+   reader.readAsDataURL(file);
+ }else finish("");
+}
+function delProduct(id){
+ products=products.filter(p=>p.id!==id);saveProducts();render();drawAdmin();
+}
+function drawAdmin(){
+ document.getElementById("adminProducts").innerHTML=products.map(p=>`<div class="item"><span>${p.img?`<img src="${p.img}" style="width:45px;height:45px;object-fit:cover;border-radius:8px;vertical-align:middle;margin-right:8px">`:p.e} ${p.n}<br><small>${p.p} сомонӣ</small></span><button onclick="delProduct(${p.id})">🗑️ Нест кардан</button></div>`).join("");
+}
+
+nav();save();render();
+</script>
+
+<div class="modal" id="adminModal"><div class="box">
+<button class="close" onclick="closeAdmin()">✕</button>
+<h2>⚙️ Admin Panel — ZARRIN Market🛍️</h2>
+<p class="muted">Аз ин ҷо маҳсулотро ба ҳамин браузер илова кардан мумкин аст.</p>
+<div class="form">
+<input id="apName" placeholder="Номи маҳсулот">
+<input id="apPrice" type="number" placeholder="Нарх, сомонӣ">
+<input id="apOld" type="number" placeholder="Нархи пешина (ихтиёрӣ)">
+<select id="apCat" style="width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:10px">
+<option>Либос</option><option>Пойафзол</option><option>Телефон ва аксессуарҳо</option><option>Косметика</option><option>Маҳсулоти хона</option>
+</select>
+<input id="apEmoji" placeholder="Икона (масалан: 👕)">
+<input id="apImage" type="file" accept="image/*" style="width:100%;padding:10px;margin:7px 0">
+<button class="order" onclick="addProduct()">➕ Илова кардани маҳсулот</button>
+</div>
+<hr>
+<h3>Маҳсулоти иловашуда</h3><div id="adminProducts"></div>
+</div></div>
+</body>
+</html>
