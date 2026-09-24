@@ -15,16 +15,16 @@ footer{margin-top:45px;background:#101722;color:#ddd;text-align:center;padding:2
 </style>
 </head>
 <body>
-<header><div class="top"><div class="logo">ZARRIN Market🛍️</div><div class="search"><input id="q" placeholder="Ҷустуҷӯи маҳсулот..." oninput="render()"></div><button class="cart" onclick="openCart()">🛒 Сабад <span id="count">0</span></button><button class="cart" onclick="openAdmin()">⚙️ Admin</button></div></header>
+<header><div class="top"><div class="logo">ZARRIN Market🛍️</div><div class="search"><input id="q" placeholder="Ҷустуҷӯи маҳсулот..." oninput="render()"></div><button class="cart" onclick="openCart()">🛒 Корзина <span id="count">0</span></button><button class="cart" onclick="openAdmin()">⚙️ Admin</button></div></header>
 <nav><div class="nav" id="nav"></div></nav>
-<section class="hero"><h1>ZARRIN Market🛍️</h1><p>Ҳамаи чиз дар як ҷо — <b>сифат, нархи дастрас ва фармоиши осон.</b></p><button class="order" style="width:auto;padding:12px 20px" onclick="openCart()">🛒 Дидани сабад</button></section>
+<section class="hero"><h1>ZARRIN Market🛍️</h1><p>Ҳамаи чиз дар як ҷо — <b>сифат, нархи дастрас ва фармоиши осон.</b></p><button class="order" style="width:auto;padding:12px 20px" onclick="openCart()">🛒 Дидани карзина </button></section>
 <main class="wrap"><div class="section-title"><h2 id="title">Ҳамаи маҳсулот</h2><span class="muted" id="result"></span></div><div id="products" class="grid"></div></main>
 <footer>© 2026 ZARRIN Market🛍️ — Ҳамаи чиз дар як ҷо!</footer>
 
-<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeCart()">✕</button><h2>🛒 Сабади шумо</h2><div id="items"></div><h3 id="sum"></h3><div class="form"><input id="name" placeholder="Ном ва насаб"><input id="phone" placeholder="Рақами телефон"><textarea id="address" rows="3" placeholder="Суроға / маҳалла"></textarea><button class="order" onclick="sendOrder()">📦 Фармоиш додан</button></div><p class="muted">Фармоиш тавассути WhatsApp ба рақами ZARRIN Market🛍️ фиристода мешавад.</p></div></div>
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeCart()">✕</button><h2>🛒 Ваша корзина </h2><div id="items"></div><h3 id="sum"></h3><div class="form"><input id="name" placeholder="Ном ва насаб"><input id="phone" placeholder="Рақами телефон"><textarea id="address" rows="3" placeholder="Суроға / маҳалла"></textarea><button class="order" onclick="sendOrder()">📦 Заказать </button></div><p class="muted">Фармоиш тавассути WhatsApp ба рақами ZARRIN Market🛍️ фиристода мешавад.</p></div></div>
 
 <script>
-const categories=["Ҳама","Либос","Пойафзол","Телефон ва аксессуарҳо","Косметика","Маҳсулоти хона"];
+const categories=["Ҳама","Либосҳо","Пойафзолҳо","Телефон ва аксессуарҳо","Косметика","Маҳсулоти хона"];
 const baseProducts=[
 {id:1,n:"Костюми варзишӣ",c:"Либос",p:280,o:350,e:"👕"},
 {id:2,n:"Пойафзоли варзишӣ",c:"Пойафзол",p:380,o:450,e:"👟"},
@@ -32,7 +32,7 @@ const baseProducts=[
 {id:4,n:"Гӯшмонаки Bluetooth",c:"Телефон ва аксессуарҳо",p:180,o:220,e:"🎧"},
 {id:5,n:"Маҷмӯаи косметика",c:"Косметика",p:150,o:200,e:"💄"},
 {id:6,n:"Фритери ҳавоӣ",c:"Маҳсулоти хона",p:980,o:1200,e:"🍳"},
-{id:7,n:"Ҷузвдон",c:"Либос",p:210,o:250,e:"🎒"},
+{id:7,n:"Сумка",c:"Либос",p:210,o:250,e:"🎒"},
 {id:8,n:"Соати электронӣ",c:"Телефон ва аксессуарҳо",p:280,o:330,e:"⌚"},
 {id:9,n:"Чароғи хона",c:"Маҳсулоти хона",p:160,o:190,e:"💡"},
 {id:10,n:"Креми рӯй",c:"Косметика",p:95,o:120,e:"🧴"}
@@ -46,13 +46,13 @@ function render(){
  let list=products.filter(p=>(current==="Ҳама"||p.c===current)&&p.n.toLowerCase().includes(q));
  document.getElementById("title").textContent=current==="Ҳама"?"Ҳамаи маҳсулот":current;
  document.getElementById("result").textContent=list.length+" маҳсулот";
- document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="pic">${p.e}</div><div class="info"><h3>${p.n}</h3><div class="muted">${p.c}</div><div class="price"><span class="old">${p.o} сомонӣ</span>${p.p} сомонӣ</div><button class="add" onclick="add(${p.id})">🛒 Ба сабад</button></div></article>`).join("");
+ document.getElementById("products").innerHTML=list.map(p=>`<article class="card"><div class="pic">${p.e}</div><div class="info"><h3>${p.n}</h3><div class="muted">${p.c}</div><div class="price"><span class="old">${p.o} сомонӣ</span>${p.p} сомонӣ</div><button class="add" onclick="add(${p.id})">🛒 Ба карзина</button></div></article>`).join("");
 }
 function save(){localStorage.setItem("zarrinCart",JSON.stringify(cart));document.getElementById("count").textContent=cart.length}
 function add(id){cart.push(products.find(p=>p.id===id));save();openCart()}
 function openCart(){document.getElementById("modal").style.display="flex";draw()}
 function closeCart(){document.getElementById("modal").style.display="none"}
-function draw(){let total=cart.reduce((s,p)=>s+p.p,0);document.getElementById("items").innerHTML=cart.length?cart.map((p,i)=>`<div class="item"><span>${p.e} ${p.n}</span><b>${p.p} сомонӣ <button onclick="removeItem(${i})">✕</button></b></div>`).join(""):`<div class="empty">Сабад ҳоло холӣ аст.</div>`;document.getElementById("sum").textContent="Ҳамагӣ: "+total+" сомонӣ"}
+function draw(){let total=cart.reduce((s,p)=>s+p.p,0);document.getElementById("items").innerHTML=cart.length?cart.map((p,i)=>`<div class="item"><span>${p.e} ${p.n}</span><b>${p.p} сомонӣ <button onclick="removeItem(${i})">✕</button></b></div>`).join(""):`<div class="empty">Карзина ҳоло холӣ аст.</div>`;document.getElementById("sum").textContent="Ҳамагӣ: "+total+" сомонӣ"}
 function removeItem(i){cart.splice(i,1);save();draw()}
 function sendOrder(){
  if(!cart.length)return alert("Сабад холӣ аст.");
@@ -78,7 +78,7 @@ function delProduct(id){
  products=products.filter(p=>p.id!==id);saveProducts();render();drawAdmin();
 }
 function drawAdmin(){
- document.getElementById("adminProducts").innerHTML=products.map(p=>`<div class="item"><span>${p.e} ${p.n}<br><small>${p.p} сомонӣ</small></span><button onclick="delProduct(${p.id})">🗑️ Нест кардан</button></div>`).join("");
+ document.getElementById("adminProducts").innerHTML=products.map(p=>`<div class="item"><span>${p.e} ${p.n}<br><small>${p.p} сомонӣ</small></span><button onclick="delProduct(${p.id})">🗑️ Удалить</button></div>`).join("");
 }
 
 nav();save();render();
